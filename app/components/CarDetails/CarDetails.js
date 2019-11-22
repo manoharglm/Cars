@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, StatusBar, Image, ScrollView } from 'react-native';
+import { FlatList, Text, View, StyleSheet, StatusBar, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph, Appbar } from 'react-native-paper';
 const theme = {
     roundness: 2,
@@ -30,17 +30,26 @@ export default class ads extends React.Component {
                     backgroundColor={theme.colors.primary} barStyle="light-content"
                 />
                 <Appbar.Header
-                    style={styles.bottom}
                     theme={theme}
                     dark={true}
                 >
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.pop()}
+                    >
+                        <Image
+                            style={{
+                                height: 35,
+                                width: 35,
+                                marginLeft: 10
+                            }}
+                            source={require('../../images/back.png')}
+                        />
+                    </TouchableOpacity>
                     <Appbar.Content
                         title="Car Details"
                     />
                 </Appbar.Header>
-                <ScrollView style={{
-                    marginTop: 50
-                }}>
+                <ScrollView >
                     <Card
                         elevation={1}
                         style={{

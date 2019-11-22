@@ -14,6 +14,8 @@ import {
     TextInput,
 } from 'react-native-paper';
 import * as commonFunctions from '../commonFunctions';
+import { Actions } from 'react-native-router-flux';
+
 const theme = {
     roundness: 2,
     colors: {
@@ -29,10 +31,12 @@ class login extends Component {
             username: '',
             password: ''
         }
-        this._retrieveData().then(data => {  
-            if(data){
+        console.log("constructor");
+        
+        this._retrieveData().then(data => {
+            if (data) {
                 this.props.navigation.replace('Tab')
-            }   
+            }
         })
     }
 
@@ -44,12 +48,12 @@ class login extends Component {
 
 
     _storeData = async (data) => {
-        if(data){
+        if (data) {
             try {
                 await AsyncStorage.setItem('ISLOGGEDIN', data)
-              } catch (error) {
-                  console.log(error);
-              }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -63,16 +67,16 @@ class login extends Component {
     }
 
     onPressLoginButton = () => {
-        if(commonFunctions.validateEmail(this.state.username)){
+        if (commonFunctions.validateEmail(this.state.username)) {
             let userData = require('../../user.json')
-            let userDetails = userData.find(userObj => userObj.email === this.state.username)
-            if(userDetails.password === this.state.password){
+            let userDetails = userData.find(userObj => userObj.email.toLowerCase() === this.state.username.toLowerCase())
+            if (userDetails && userDetails.password === this.state.password) {
                 this._storeData(JSON.stringify(true))
                 this.props.navigation.replace('Tab')
-            }else{
+            } else {
                 alert('Invalid Email or Password')
             }
-        }else{
+        } else {
             alert('Invalid EmailID')
         }
     }
@@ -98,8 +102,8 @@ class login extends Component {
                         label='Email'
                         underlineColor='black'
                         theme={theme}
-                        textContentType = 'emailAddress'
-                        keyboardAppearance = 'email-address'
+                        textContentType='emailAddress'
+                        keyboardAppearance='email-address'
                     />
                     <TextInput
                         style={{ backgroundColor: 'white', marginHorizontal: 20 }}

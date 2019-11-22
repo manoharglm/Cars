@@ -3,7 +3,7 @@ import { FlatList, Text, View, StyleSheet, StatusBar, Image, TouchableOpacity, T
 import SQLite from "react-native-sqlite-storage"
 SQLite.enablePromise(true);
 import { Card, Title, Paragraph, Appbar } from 'react-native-paper';
-
+import Favourites from '../Favourites/Favourites'
 const theme = {
     roundness: 2,
     colors: {
@@ -11,6 +11,7 @@ const theme = {
         accent: 'black',
     },
 };
+import { Actions } from 'react-native-router-flux';
 
 // var db = openDatabase({ name: 'cars.db', createFromLocation : 1});
 
@@ -70,21 +71,31 @@ export default class home extends React.Component {
                     <Title>$ {item.price}</Title>
                     <Paragraph>Locattion: {item.city}</Paragraph>
                 </Card.Content>
+                <View
+                    style = {{
+                        margin: 15
+                    }}
+                >
+                    <Favourites
+                        data={item}
+                    />
+                </View>
+
             </Card>
         )
     }
     _storeData = async (data) => {
-        if(data){
+        if (data) {
             try {
                 await AsyncStorage.setItem('ISLOGGEDIN', data)
-              } catch (error) {
-                  console.log(error);
-              }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
     logout = () => {
-        this.props.navigation.navigate("Login")
+        Actions.reset("Login")
         this._storeData(JSON.stringify(false))
     }
     render() {
