@@ -31,7 +31,7 @@ class login extends Component {
         }
         this._retrieveData().then(data => {  
             if(data){
-                this.props.navigation.replace('Home')
+                this.props.navigation.replace('Tab')
             }   
         })
     }
@@ -68,7 +68,7 @@ class login extends Component {
             let userDetails = userData.find(userObj => userObj.email === this.state.username)
             if(userDetails.password === this.state.password){
                 this._storeData(JSON.stringify(true))
-                this.props.navigation.replace('Home')
+                this.props.navigation.replace('Tab')
             }else{
                 alert('Invalid Email or Password')
             }
