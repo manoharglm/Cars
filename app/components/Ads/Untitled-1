@@ -1,0 +1,5 @@
+INSERT INTO user_ads(url,city,city_url,price,year,manufacturer,make,condition,cylinders,fuel,odometer,title_status,transmission,VIN,drive,size,type,paint_color,image_url,desc,lat,long)
+VALUES ('https://abilene.craigslist.org/cto/d/aspermont-2009-chevrolet-suburban-lt/6977351526.html','abilene, TX','https://abilene.craigslist.org',9000,2009,'chevrolet','suburban lt2','good','8 cylinders','gas',217743,'clean','automatic','1GFNC26099R211276','rwd','full-size','SUV','white','https://images.craigslist.org/00909_5P6f1E6zHlj_600x450.jpg','2WD 1/2 ton
+Leather Captains Chairs
+In good condition- 217743 miles
+2 owner family car',33.1301,-100.2344)

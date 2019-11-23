@@ -15,6 +15,8 @@ import {
 } from 'react-native-paper';
 import * as commonFunctions from '../commonFunctions';
 import { Actions } from 'react-native-router-flux';
+import SQLite from "react-native-sqlite-storage"
+SQLite.enablePromise(true);
 
 const theme = {
     roundness: 2,
@@ -29,13 +31,18 @@ class login extends Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            login: false,
         }
-        console.log("constructor");
-        
+        this.userData = []
+
         this._retrieveData().then(data => {
             if (data) {
-                this.props.navigation.replace('Tab')
+                Actions.reset('Tab')
+            }else{
+                this.setState({
+                    login: true
+                })
             }
         })
     }
@@ -66,24 +73,45 @@ class login extends Component {
         }
     }
 
-    onPressLoginButton = () => {
-        if (commonFunctions.validateEmail(this.state.username)) {
-            let userData = require('../../user.json')
-            let userDetails = userData.find(userObj => userObj.email.toLowerCase() === this.state.username.toLowerCase())
-            if (userDetails && userDetails.password === this.state.password) {
-                this._storeData(JSON.stringify(true))
-                this.props.navigation.replace('Tab')
-            } else {
-                alert('Invalid Email or Password')
-            }
+    getDataFromDB = async (username) => {
+        const db = await SQLite.openDatabase({ name: 'cars.db', createFromLocation: 1, location: 'Library' }, this.openCB, this.errorCB);
+
+        return db.transaction((tx) => {
+            return tx.executeSql(`SELECT * from user_list WHERE username like '${username}'`, [], (tx, results) => {
+                let len = results.rows.length;
+                let userData = []
+                for (let i = 0; i < len; i++) {
+                    userData.push(results.rows.item(i))
+                }
+                this.userData = userData
+            });
+        });
+    }
+
+    componentWillUnmount(){
+        this.userData = []
+    }
+
+    onPressLoginButton = async () => {
+        if (commonFunctions.validateEmail(this.state.username) && this.state.password.length) {
+            this.getDataFromDB(this.state.username.toLocaleLowerCase()).then(_ => {
+                let userDetails = this.userData[0]                
+                if (userDetails && userDetails.password === this.state.password) {
+                    this._storeData(JSON.stringify(true))
+                    this.props.navigation.replace('Tab')
+                } else {
+                    alert('Invalid Email or Password')
+                }
+            })
         } else {
-            alert('Invalid EmailID')
+            alert('Invalid Email or Password')
         }
     }
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+            this.state.login
+            ? <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
                 <View style={styles.container}>
                     {/* <Image
                         style={{
@@ -128,6 +156,12 @@ class login extends Component {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
+            : <View
+                style= {{
+                    flex: 1,
+                    backgroundColor: 'white'
+                }}
+            ></View>
         )
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, StatusBar, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, Appbar } from 'react-native-paper';
+import { FlatList, Text, View, StyleSheet, StatusBar, Image, ScrollView, TouchableOpacity, Button, Linking } from 'react-native';
+import { Avatar, Card, Title, Paragraph, Appbar, Menu, Divider, Provider, Portal, FAB, TouchableRipple } from 'react-native-paper';
+import Modal from "react-native-modal";
 const theme = {
     roundness: 2,
     colors: {
@@ -13,12 +14,25 @@ const theme = {
 export default class ads extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            visible: false
+        }
         this.data = this.props.navigation.state.params
     }
+    _showModal = () => this.setState({ visible: true });
 
+    _hideModal = () => this.setState({ visible: false });
+    openAUrl = (url) => {
+        //alert(url);
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                // console.log('Can\'t handle url: ' + url);
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => err);
+    }
     render() {
-        console.log(this.props);
-
         return (
             <View
                 style={{
@@ -51,9 +65,8 @@ export default class ads extends React.Component {
                 </Appbar.Header>
                 <ScrollView >
                     <Card
-                        elevation={1}
                         style={{
-                            margin: 10
+                            margin: 10,
                         }}
                     >
                         <Card.Title title={`${this.data.manufacturer} ${this.data.make}`} subtitle={`${this.data.year} | ${this.data.type} | ${this.data.fuel} | ${this.data.type}`} />
@@ -85,6 +98,82 @@ export default class ads extends React.Component {
                         </Card.Content>
                     </Card>
                 </ScrollView>
+                <FAB
+                    style={styles.fab}
+                    large
+                    icon={require('../../images/chat.png')}
+                    theme={theme}
+                    onPress={() => this._showModal()}
+                />
+                <Modal
+                    isVisible={this.state.visible}
+                    onRequestClose={() => this._hideModal()}
+                    onBackdropPress={() => this._hideModal()}
+                >
+                    <View style={{
+                        backgroundColor: 'white',
+                        height: '30%',
+                        borderRadius: 5,
+                        justifyContent: 'space-around',
+                        paddingVertical: 20
+                    }}>
+                        <TouchableRipple
+                            onPress={() => this.openAUrl(`tel:+919912122281`)}
+                            rippleColor="rgba(0, 0, 0, .32)"
+                        >
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    marginHorizontal: 25,
+                                    margin: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start'
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 40,
+                                        marginRight: 20,
+                                        marginBottom: 10
+                                    }}
+                                >&#x2706;</Text>
+                                <Text
+                                    style={{
+                                        fontSize: 18
+                                    }}
+                                >+919912122281</Text>
+                            </View>
+                        </TouchableRipple>
+                        <TouchableRipple
+                            onPress={() => this.openAUrl(`mailto:manohargunduboina@gmail.com?subject=Regarding your post in Cars Application`)}
+                            rippleColor="rgba(0, 0, 0, .32)"
+                        >
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    marginHorizontal: 25,
+                                    margin: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start'
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 40,
+                                        marginRight: 20,
+                                        marginBottom: 10
+                                    }}
+                                >&#x1F3E0;</Text>
+                                <Text
+                                    style={{
+                                        fontSize: 18
+                                    }}
+                                >manohargunduboina@gmail.com</Text>
+                            </View>
+                        </TouchableRipple>
+
+                    </View>
+                </Modal>
             </View>
         )
     }
@@ -94,6 +183,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
+    },
+    fab: {
+        position: 'absolute',
+        margin: 30,
+        right: 0,
+        bottom: 0,
     },
     bottom: {
         position: 'absolute',

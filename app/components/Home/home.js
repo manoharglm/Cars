@@ -99,8 +99,6 @@ export default class home extends React.Component {
         this._storeData(JSON.stringify(false))
     }
     render() {
-        console.log("DATAT", this.state.dataArr);
-
         return (
             <View style={styles.container}>
                 <StatusBar

@@ -5,6 +5,7 @@ import Login from './components/Login/login'
 import Home from './components/Home/home'
 import Ads from './components/Ads/ads'
 import CarDetails from './components/CarDetails/CarDetails'
+import CreateAd from './components/Ads/CreateAd'
 import TabIcon from './components/TabIcon';
 import DrawerContent from './components/Drawer/DrawerContent'
 import MenuIcon from './images/menu.png';
@@ -49,10 +50,10 @@ const Routes = (props) => (
             <Tabs
                 key="Tab"
                 backToInitial
-                showLabel={false}
-                activeBackgroundColor="black"
+                showLabel={true}
+                activeBackgroundColor="white"
                 inactiveBackgroundColor="white"
-                activeTintColor="white"
+                activeTintColor="black"
             >
                 <Stack
                     key="tab_1"
@@ -79,6 +80,18 @@ const Routes = (props) => (
                     <Scene
                         key="Ads"
                         component={Ads}
+                        hideNavBar={true}
+                        gesturesEnabled={false}
+                    />
+                    <Scene
+                        key="CarDetails"
+                        component={CarDetails}
+                        hideNavBar={true}
+                        gesturesEnabled={false}
+                    />
+                    <Scene
+                        key="CreateAd"
+                        component={CreateAd}
                         hideNavBar={true}
                         gesturesEnabled={false}
                     />
