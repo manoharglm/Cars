@@ -34,7 +34,6 @@ export default class ads extends React.Component {
                 this.setState({
                     userAds
                 })
-
             });
         });
     }
@@ -64,6 +63,16 @@ export default class ads extends React.Component {
         )
     }
 
+    updateuserAds = (data) => {
+        console.log('userads',data);
+        
+        this.setState(prevState => {
+            return {
+                userAds : [...prevState.userAds,data]
+            }
+        })
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -82,6 +91,7 @@ export default class ads extends React.Component {
                     contentContainerStyle={{
                         marginBottom: 100
                     }}
+                    inverted
                     renderItem={({ item, index }) => this.renderItem(item, index)}
                 // onEndReached = {this.getDataFromDB(this.page++)}
                 />
@@ -90,7 +100,7 @@ export default class ads extends React.Component {
                     large
                     icon={require('../../images/plus.png')}
                     theme={theme}
-                    onPress={() => this.props.navigation.push("CreateAd")}
+                    onPress={() => this.props.navigation.push("CreateAd", {updateuserAds : userAds => this.updateuserAds(userAds)})}
                 />
             </View>
         );

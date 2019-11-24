@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native';
-import { 
-    StyleSheet,
-    AsyncStorage
-} from 'react-native';
+import * as commonFunctions from '../commonFunctions';
 
 export default class Favourites extends Component {
     constructor(props) {
@@ -14,10 +11,9 @@ export default class Favourites extends Component {
     }
 
     componentDidMount(){
-        // AsyncStorage.removeItem('WATCHLIST')
-        this._retrieveData().then(data => {                        
+        commonFunctions._retrieveData('FAVOURITES').then(data => {                        
             if(!data){
-                this._storeData(JSON.stringify([])) 
+                commonFunctions._storeData(JSON.stringify([]),'FAVOURITES') 
             }else if(data.length !== 0){
                 if(data.some(item => item.url === this.props.data.url)){
                     this.setState({
@@ -28,32 +24,14 @@ export default class Favourites extends Component {
         })        
     }
 
-    _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('FAVOURITES');
-            return JSON.parse(value)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    _storeData = async (data) => {
-        if(data){
-            try {
-                await AsyncStorage.setItem('FAVOURITES', data)
-              } catch (error) {
-                  console.log(error);
-              }
-        }
-    }
     handleButton =(bool)=>{
         this.setState({
             watchlistButton : bool,
             // data: this.props.data
         }, () => {
-            this._retrieveData().then( data => {
+            commonFunctions._retrieveData('FAVOURITES').then( data => {
                 let updatedData =[...data,this.props.data]
-                this._storeData(JSON.stringify(updatedData)) 
+                commonFunctions._storeData(JSON.stringify(updatedData),'FAVOURITES') 
             })
         })
     }

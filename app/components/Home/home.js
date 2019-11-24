@@ -1,8 +1,21 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, StatusBar, Image, TouchableOpacity, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import {
+    FlatList,
+    View,
+    StyleSheet,
+    StatusBar,
+    Image,
+    TouchableOpacity,
+    AsyncStorage
+} from 'react-native';
 import SQLite from "react-native-sqlite-storage"
 SQLite.enablePromise(true);
-import { Card, Title, Paragraph, Appbar } from 'react-native-paper';
+import {
+    Card,
+    Title,
+    Paragraph,
+    Appbar
+} from 'react-native-paper';
 import Favourites from '../Favourites/Favourites'
 const theme = {
     roundness: 2,
@@ -12,8 +25,7 @@ const theme = {
     },
 };
 import { Actions } from 'react-native-router-flux';
-
-// var db = openDatabase({ name: 'cars.db', createFromLocation : 1});
+import * as commonFunctions from '../commonFunctions';
 
 export default class home extends React.Component {
     constructor(props) {
@@ -44,20 +56,17 @@ export default class home extends React.Component {
         });
     }
 
-    openCB = () => {
-        console.log("OPENED");
+    logout = () => {
+        commonFunctions._storeData(JSON.stringify(false))
+        Actions.reset("Login")
     }
-    errorCB = () => {
-        console.log("OPENED");
-    }
+
     renderItem = (item, index) => {
         return (
             <Card
                 elevation={1}
-                style={{
-                    margin: 10
-                }}
-                onPress={() => this.props.navigation.push("CarDetails",  {data: item, contact: true})}
+                style={{ margin: 10 }}
+                onPress={() => this.props.navigation.push("CarDetails", { data: item, contact: true })}
             >
                 <Card.Cover source={{ uri: item.image_url }} />
                 <Card.Title title={`${item.manufacturer} ${item.make}`} subtitle={`${item.year} | ${item.type} | ${item.fuel} | ${item.type}`} />
@@ -72,9 +81,7 @@ export default class home extends React.Component {
                     <Paragraph>Location: {item.city}</Paragraph>
                 </Card.Content>
                 <View
-                    style = {{
-                        margin: 15
-                    }}
+                    style={{ margin: 15 }}
                 >
                     <Favourites
                         data={item}
@@ -84,21 +91,11 @@ export default class home extends React.Component {
             </Card>
         )
     }
-    _storeData = async (data) => {
-        if (data) {
-            try {
-                await AsyncStorage.setItem('ISLOGGEDIN', data)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
 
-    logout = () => {
-        Actions.reset("Login")
-        this._storeData(JSON.stringify(false))
-    }
+
     render() {
+        console.log("RENDERED");
+        
         return (
             <View style={styles.container}>
                 <StatusBar
@@ -129,7 +126,8 @@ export default class home extends React.Component {
                         marginBottom: 100
                     }}
                     renderItem={({ item, index }) => this.renderItem(item, index)}
-                // onEndReached = {this.getDataFromDB(this.page++)}
+                    onEndReachedThreshold={0.8}
+                    onEndReached={() => this.getDataFromDB(this.page++)} 
                 />
             </View>
         );

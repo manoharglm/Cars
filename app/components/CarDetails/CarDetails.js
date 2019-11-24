@@ -1,6 +1,22 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, StatusBar, Image, ScrollView, TouchableOpacity, Button, Linking } from 'react-native';
-import { Avatar, Card, Title, Paragraph, Appbar, Menu, Divider, Provider, Portal, FAB, TouchableRipple } from 'react-native-paper';
+import {
+    Text,
+    View,
+    StyleSheet,
+    StatusBar,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    Linking
+} from 'react-native';
+import {
+    Card,
+    Title,
+    Paragraph,
+    Appbar,
+    FAB,
+    TouchableRipple
+} from 'react-native-paper';
 import Modal from "react-native-modal";
 const theme = {
     roundness: 2,
@@ -9,6 +25,11 @@ const theme = {
         accent: 'black',
     },
 };
+
+let contactData = {
+    phone: '+919876543210',
+    email: '​info@aigen.tech'
+}
 
 export default class ads extends React.Component {
     constructor(props) {
@@ -19,20 +40,17 @@ export default class ads extends React.Component {
         this.data = this.props.navigation.state.params.data
     }
     _showModal = () => this.setState({ visible: true });
-
     _hideModal = () => this.setState({ visible: false });
+
     openAUrl = (url) => {
         Linking.canOpenURL(url).then(supported => {
-            if (!supported) {
-                // console.log('Can\'t handle url: ' + url);
-            } else {
+            if (supported) {
                 return Linking.openURL(url);
             }
         }).catch(err => err);
     }
+
     render() {
-        console.log(this.props);
-        
         return (
             <View
                 style={{
@@ -41,7 +59,8 @@ export default class ads extends React.Component {
                 }}
             >
                 <StatusBar
-                    backgroundColor={theme.colors.primary} barStyle="light-content"
+                    backgroundColor={theme.colors.primary}
+                    barStyle="light-content"
                 />
                 <Appbar.Header
                     theme={theme}
@@ -107,13 +126,7 @@ export default class ads extends React.Component {
                             theme={theme}
                             onPress={() => this._showModal()}
                         />
-                        : <FAB
-                            style={styles.fab}
-                            large
-                            icon={require('../../images/plus.png')}
-                            theme={theme}
-                            onPress={() => this.props.navigation.push("CreateAd")}
-                        />
+                        : null
                 }
 
                 <Modal
@@ -129,7 +142,7 @@ export default class ads extends React.Component {
                         paddingVertical: 20
                     }}>
                         <TouchableRipple
-                            onPress={() => this.openAUrl(`tel:+919912122281`)}
+                            onPress={() => this.openAUrl(`tel:${contactData.phone}`)}
                             rippleColor="rgba(0, 0, 0, .32)"
                         >
                             <View
@@ -152,11 +165,11 @@ export default class ads extends React.Component {
                                     style={{
                                         fontSize: 18
                                     }}
-                                >+919912122281</Text>
+                                >{contactData.phone}</Text>
                             </View>
                         </TouchableRipple>
                         <TouchableRipple
-                            onPress={() => this.openAUrl(`mailto:manohargunduboina@gmail.com?subject=Regarding your post in Cars Application`)}
+                            onPress={() => this.openAUrl(`mailto:${contactData.email}?subject=Regarding your post in Cars Application`)}
                             rippleColor="rgba(0, 0, 0, .32)"
                         >
                             <View
@@ -179,7 +192,7 @@ export default class ads extends React.Component {
                                     style={{
                                         fontSize: 18
                                     }}
-                                >manohargunduboina@gmail.com</Text>
+                                >{contactData.email}</Text>
                             </View>
                         </TouchableRipple>
 

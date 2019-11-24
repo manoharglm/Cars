@@ -36,7 +36,7 @@ class login extends Component {
         }
         this.userData = []
 
-        this._retrieveData().then(data => {
+        commonFunctions._retrieveData('ISLOGGEDIN').then(data => {
             if (data) {
                 Actions.reset('Tab')
             }else{
@@ -50,26 +50,6 @@ class login extends Component {
     handleChange = (name) => {
         return (text) => {
             this.setState({ [name]: text })
-        }
-    }
-
-
-    _storeData = async (data) => {
-        if (data) {
-            try {
-                await AsyncStorage.setItem('ISLOGGEDIN', data)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-    _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('ISLOGGEDIN');
-            return JSON.parse(value)
-        } catch (error) {
-            console.log(error);
         }
     }
 
@@ -97,7 +77,7 @@ class login extends Component {
             this.getDataFromDB(this.state.username.toLocaleLowerCase()).then(_ => {
                 let userDetails = this.userData[0]                
                 if (userDetails && userDetails.password === this.state.password) {
-                    this._storeData(JSON.stringify(true))
+                    commonFunctions._storeData(JSON.stringify(true),'ISLOGGEDIN')
                     this.props.navigation.replace('Tab')
                 } else {
                     alert('Invalid Email or Password')
@@ -113,16 +93,6 @@ class login extends Component {
             this.state.login
             ? <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
                 <View style={styles.container}>
-                    {/* <Image
-                        style={{
-                            width: 100,
-                            height: 100,
-                            alignSelf: 'center',
-                            margin: 50,
-                        }}
-                        source={require('../assets/icon.png')}
-                    /> */}
-
                     <TextInput
                         style={{ backgroundColor: 'white', marginHorizontal: 20 }}
                         onChangeText={this.handleChange('username')}
@@ -171,7 +141,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         flexDirection: 'column',
-        // alignItems: 'center',
         justifyContent: 'center'
     },
 });

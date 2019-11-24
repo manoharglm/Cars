@@ -1,5 +1,13 @@
 import React from 'react';
-import { FlatList, Text, View, StyleSheet, StatusBar, Image, TouchableOpacity, Button } from 'react-native';
+import { 
+    FlatList, 
+    View, 
+    StyleSheet, 
+    StatusBar, 
+    Image, 
+    TouchableOpacity, 
+    Button 
+} from 'react-native';
 import SQLite from "react-native-sqlite-storage"
 SQLite.enablePromise(true);
 import { Appbar, TextInput } from 'react-native-paper';
@@ -71,21 +79,25 @@ export default class CreateAd extends React.Component {
         return db.transaction((tx) => {
             return tx.executeSql(`INSERT INTO user_ads (city,price,year,manufacturer,make,condition,cylinders,fuel,odometer,transmission,VIN,drive,size,type,paint_color,image_url,desc)
             VALUES ('${city}',${price},${year},'${manufacturer}','${make}','${condition}','${cylinders}','${fuel}','${odometer}','${transmission}','${VIN}','${drive}','${size}','${type}','${paint_color}','file:///${imgSource.uri}','${desc}')`, [], (tx, results) => {
-                console.log(results);
+                tx.executeSql('SELECT * FROM user_ads', [], (tx, results) => {
+                    let len = results.rows.length;
+                    this.props.navigation.state.params.updateuserAds(results.rows.item(len-1))
+                    this.props.navigation.pop()
+                })
             });
         });
     }
 
     postAdd = () => {
-        
         this.getDataFromDB()
-
     }
+
     handleChange = (name) => {
         return (text) => {
             this.setState({ [name]: text })
         }
     }
+
     renderItem = (item, index) => {
         return <TextInput
             style={{ backgroundColor: 'white', marginHorizontal: 20 }}
@@ -99,9 +111,7 @@ export default class CreateAd extends React.Component {
         />
     }
 
-    render() {
-        console.log(this.state.imgSource);
-        
+    render() {        
         return (
             <View style={styles.container}>
                 <StatusBar

@@ -1,36 +1,14 @@
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { Scene, Router, Actions, Reducer, ActionConst, Overlay, Tabs, Modal, Drawer, Stack, Lightbox } from 'react-native-router-flux';
+import React, { Component } from 'react'
+import { Scene, Router, Tabs, Stack } from 'react-native-router-flux'
 import Login from './components/Login/login'
 import Home from './components/Home/home'
 import Ads from './components/Ads/ads'
 import CarDetails from './components/CarDetails/CarDetails'
 import CreateAd from './components/Ads/CreateAd'
-import TabIcon from './components/TabIcon';
-import DrawerContent from './components/Drawer/DrawerContent'
-import MenuIcon from './images/menu.png';
+import TabIcon from './components/TabIcon'
 
 const getSceneStyle = () => ({
     backgroundColor: '#333333'
-});
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'transparent',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    scene: {
-        backgroundColor: 'white',
-        shadowOpacity: 1,
-        shadowRadius: 3,
-    },
-    tabBarStyle: {
-        backgroundColor: 'black',
-    },
-    tabBarSelectedItemStyle: {
-        backgroundColor: 'white',
-    },
 });
 
 const Routes = (props) => (
@@ -41,7 +19,6 @@ const Routes = (props) => (
         >
             <Scene
                 key="Login"
-                initial
                 component={Login}
                 hideNavBar={true}
                 gesturesEnabled={false}
