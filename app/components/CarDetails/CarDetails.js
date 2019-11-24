@@ -9,7 +9,6 @@ const theme = {
         accent: 'black',
     },
 };
-// var db = openDatabase({ name: 'cars.db', createFromLocation : 1});
 
 export default class ads extends React.Component {
     constructor(props) {
@@ -17,13 +16,12 @@ export default class ads extends React.Component {
         this.state = {
             visible: false
         }
-        this.data = this.props.navigation.state.params
+        this.data = this.props.navigation.state.params.data
     }
     _showModal = () => this.setState({ visible: true });
 
     _hideModal = () => this.setState({ visible: false });
     openAUrl = (url) => {
-        //alert(url);
         Linking.canOpenURL(url).then(supported => {
             if (!supported) {
                 // console.log('Can\'t handle url: ' + url);
@@ -33,6 +31,8 @@ export default class ads extends React.Component {
         }).catch(err => err);
     }
     render() {
+        console.log(this.props);
+        
         return (
             <View
                 style={{
@@ -74,7 +74,7 @@ export default class ads extends React.Component {
                         <Card.Cover source={{ uri: this.data.image_url }} />
                         <Card.Content>
                             <Title>$ {this.data.price}</Title>
-                            <Paragraph>Locattion: {this.data.city}</Paragraph>
+                            <Paragraph>Location: {this.data.city}</Paragraph>
                         </Card.Content>
                         <View
                             style={{
@@ -98,13 +98,24 @@ export default class ads extends React.Component {
                         </Card.Content>
                     </Card>
                 </ScrollView>
-                <FAB
-                    style={styles.fab}
-                    large
-                    icon={require('../../images/chat.png')}
-                    theme={theme}
-                    onPress={() => this._showModal()}
-                />
+                {
+                    this.props.navigation.state.params.contact
+                        ? <FAB
+                            style={styles.fab}
+                            large
+                            icon={require('../../images/chat.png')}
+                            theme={theme}
+                            onPress={() => this._showModal()}
+                        />
+                        : <FAB
+                            style={styles.fab}
+                            large
+                            icon={require('../../images/plus.png')}
+                            theme={theme}
+                            onPress={() => this.props.navigation.push("CreateAd")}
+                        />
+                }
+
                 <Modal
                     isVisible={this.state.visible}
                     onRequestClose={() => this._hideModal()}
@@ -163,7 +174,7 @@ export default class ads extends React.Component {
                                         marginRight: 20,
                                         marginBottom: 10
                                     }}
-                                >&#x1F3E0;</Text>
+                                >&#9993;</Text>
                                 <Text
                                     style={{
                                         fontSize: 18

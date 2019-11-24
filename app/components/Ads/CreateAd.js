@@ -27,27 +27,29 @@ export default class CreateAd extends React.Component {
         super(props);
         this.state = {
             imgSource: {},
-            city: '',
-            price: '',
-            year: '',
-            manufacturer: '',
-            make: '',
-            condition: '',
-            cylinders: '',
-            fuel: '',
-            odometer: '',
-            transmission: '',
-            VIN: '',
-            drive: '',
-            size: '',
-            type: '',
-            paint_color: '',
-            image_url: '',
-            desc: '',
+            city: null,
+            price: null,
+            year: null,
+            manufacturer: null,
+            make: null,
+            condition: null,
+            cylinders: null,
+            fuel: null,
+            odometer: null,
+            transmission: null,
+            VIN: null,
+            drive: null,
+            size: null,
+            type: null,
+            paint_color: null,
+            image_url: null,
+            desc: null,
         }
     }
     handleImagePicker = () => {
         ImagePicker.showImagePicker(options, (response) => {
+            console.log(response);
+            
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -55,7 +57,7 @@ export default class CreateAd extends React.Component {
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
             } else {
-                const source = { uri: response.uri };
+                const source = { uri: response.path };
                 this.setState({
                     imgSource: source,
                 });
@@ -64,26 +66,12 @@ export default class CreateAd extends React.Component {
     }
     
     getDataFromDB = async () => {
-        console.log('getDataFromDB');
-
-        let { city, price, year, manufacturer, make, condition, cylinders, fuel, odometer, transmission, VIN, drive, size, type, paint_color, desc, image_url } =this.state
+        let { city, price, year, manufacturer, make, condition, cylinders, fuel, odometer, transmission, VIN, drive, size, type, paint_color, desc, imgSource } =this.state
         const db = await SQLite.openDatabase({ name: 'cars.db', createFromLocation: 1, location: 'Library' }, this.openCB, this.errorCB);
         return db.transaction((tx) => {
-            console.log('transaction');
-
             return tx.executeSql(`INSERT INTO user_ads (city,price,year,manufacturer,make,condition,cylinders,fuel,odometer,transmission,VIN,drive,size,type,paint_color,image_url,desc)
-            VALUES ('${city}',${price},${year},'${manufacturer}','${make}','${condition}','${cylinders}','${fuel}','${odometer}','${transmission}','${VIN}','${drive}','${size}','${type}','${paint_color}','${17}','${desc}')`, [], (tx, results) => {
+            VALUES ('${city}',${price},${year},'${manufacturer}','${make}','${condition}','${cylinders}','${fuel}','${odometer}','${transmission}','${VIN}','${drive}','${size}','${type}','${paint_color}','file:///${imgSource.uri}','${desc}')`, [], (tx, results) => {
                 console.log(results);
-                
-                // let len = results.rows.length;
-                // let userAds = []
-                // for (let i = 0; i < len; i++) {
-                //     userAds.push(results.rows.item(i))
-                // }
-                // this.setState({
-                //     userAds
-                // })
-
             });
         });
     }
@@ -112,6 +100,8 @@ export default class CreateAd extends React.Component {
     }
 
     render() {
+        console.log(this.state.imgSource);
+        
         return (
             <View style={styles.container}>
                 <StatusBar

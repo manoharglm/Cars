@@ -46,7 +46,7 @@ export default class ads extends React.Component {
                 style={{
                     margin: 10
                 }}
-                onPress={() => this.props.navigation.push("CarDetails", item)}
+                onPress={() => this.props.navigation.push("CarDetails", {data: item, contact: false})}
             >
                 <Card.Cover source={{ uri: item.image_url }} />
                 <Card.Title title={`${item.manufacturer} ${item.make}`} subtitle={`${item.year} | ${item.type} | ${item.fuel} | ${item.type}`} />
@@ -58,7 +58,7 @@ export default class ads extends React.Component {
                 />
                 <Card.Content>
                     <Title>$ {item.price}</Title>
-                    <Paragraph>Locattion: {item.city}</Paragraph>
+                    <Paragraph>Location: {item.city}</Paragraph>
                 </Card.Content>
             </Card>
         )

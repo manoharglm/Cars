@@ -57,7 +57,7 @@ export default class home extends React.Component {
                 style={{
                     margin: 10
                 }}
-                onPress={() => this.props.navigation.push("CarDetails", item)}
+                onPress={() => this.props.navigation.push("CarDetails",  {data: item, contact: true})}
             >
                 <Card.Cover source={{ uri: item.image_url }} />
                 <Card.Title title={`${item.manufacturer} ${item.make}`} subtitle={`${item.year} | ${item.type} | ${item.fuel} | ${item.type}`} />
@@ -69,7 +69,7 @@ export default class home extends React.Component {
                 />
                 <Card.Content>
                     <Title>$ {item.price}</Title>
-                    <Paragraph>Locattion: {item.city}</Paragraph>
+                    <Paragraph>Location: {item.city}</Paragraph>
                 </Card.Content>
                 <View
                     style = {{
