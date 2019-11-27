@@ -57,7 +57,7 @@ export default class home extends React.Component {
     }
 
     logout = () => {
-        commonFunctions._storeData(JSON.stringify(false))
+        commonFunctions._storeData(JSON.stringify(false),"ISLOGGEDIN")
         Actions.reset("Login")
     }
 
